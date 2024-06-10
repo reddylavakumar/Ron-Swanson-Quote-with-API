@@ -1,25 +1,30 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [quote, setQuote] = useState('');
+
+  const fetchQuote = async () => {
+    try {
+      const response = await fetch('https://ron-swanson-quotes.herokuapp.com/v2/quotes');
+      const data = await response.json();
+      setQuote(data[0]);
+    } catch (error) {
+      console.error('Error fetching the quote:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchQuote();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ textAlign: 'center', marginTop: '20%' }}>
+      <h1>Ron Swanson Quote</h1>
+      <p>{quote}</p>
+      <button onClick={fetchQuote}>Get New Quote</button>
     </div>
   );
-}
+};
 
 export default App;
